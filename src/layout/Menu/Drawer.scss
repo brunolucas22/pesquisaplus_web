@@ -1,0 +1,64 @@
+$transition-property: width;
+$transition-duration: 6s;
+$transition-delay: 6s;
+
+.drawer {
+	width: max-content;
+	max-height: 100vh;
+	min-height: 100vh;
+	min-width: 80px;
+	font-size: 20px;
+	overflow: auto;
+	padding: 0px;
+	background-color: #fff;
+	transition-property: $transition-property;
+	transition-duration: $transition-duration;
+	transition-delay: $transition-delay;
+	display: flex;
+	flex-direction: column;
+
+	.option-menu {
+		display: flex;
+		height: 60px;
+		align-items: center;
+		justify-content: start;
+		.icon-menu {
+			font-size: 20px;
+		}
+	}
+
+	// Estilos para telas pequenas (até 768px)
+	@media screen and (max-width: 768px) {
+		.achievement-container {
+			flex-direction: column; // Empilha os elementos verticalmente
+			height: auto; // Altura automática para acomodar o conteúdo
+		}
+
+		.achievement-details {
+			margin-top: 1rem; // Adiciona um espaço entre a imagem e as informações
+		}
+
+		// Outros estilos específicos para telas pequenas
+	}
+
+	@media screen and (min-width: 574px) {
+		min-height: 100vh;
+		width: 250px;
+		min-width: 250px;
+
+		/* update DivIconMenu */
+		.div-icon-menu {
+			width: 250px;
+		}
+
+		/* update OptionMenu */
+		.option-menu {
+			width: 250px;
+		}
+
+		/* display to title */
+		.title {
+			display: block;
+		}
+	}
+}
