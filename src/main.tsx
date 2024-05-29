@@ -10,6 +10,7 @@ import { Suspense } from 'react';
 import ReactDOM from 'react-dom/client';
 import { Provider } from 'react-redux';
 import { RouterProvider } from 'react-router-dom';
+import { GlobalLoalding } from './components/GlobalLoading/index.tsx';
 import { LoadingComponent } from './components/LoadingComponent.tsx';
 import { queryClient } from './config/queryClient.ts';
 import './index.scss';
@@ -20,6 +21,7 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 	<QueryClientProvider client={queryClient}>
 		<Provider store={store}>
 			<Suspense fallback={<LoadingComponent />}>
+				<GlobalLoalding />
 				<RouterProvider router={router} />
 				<CustomDialog />
 			</Suspense>

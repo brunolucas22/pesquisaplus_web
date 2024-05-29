@@ -75,7 +75,13 @@ export const LoginPageForm = () => {
 						className={classNames({
 							'p-invalid': errors.email_usuario,
 						})}
-						{...register('email_usuario', { required: true })}
+						{...register('email_usuario', {
+							required: true,
+							pattern: {
+								value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
+								message: 'Digite um Endereço de E-mail Válido',
+							},
+						})}
 					/>
 				</div>
 
