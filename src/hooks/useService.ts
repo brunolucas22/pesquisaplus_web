@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { api, apiFormData } from '@config/axios';
 import { queryClient } from '@config/queryClient';
 
@@ -45,7 +46,7 @@ export function useService({ key, baseUrl }: IUseService) {
 		options?: UseQueryOptions<unknown, unknown, unknown, string[]>,
 		timeout?: number
 	) {
-		return useQuery<unknown, unknown, unknown, string[]>(
+		return useQuery<any, any, any, string[]>(
 			{
 				...options,
 				queryKey: key,
@@ -73,12 +74,9 @@ export function useService({ key, baseUrl }: IUseService) {
 				data,
 				queryParams,
 				restEndpoint,
-				useBarRestEndpoint = true,
 				onUploadProgress,
 			}: IUseMutationsParams<TPayloadPost>) => {
-				const url = restEndpoint
-					? `${baseUrl}${useBarRestEndpoint ? '/' : ''}${restEndpoint}`
-					: baseUrl;
+				const url = restEndpoint ? `${baseUrl}${restEndpoint}` : baseUrl;
 				return await api.post(url, data ?? undefined, {
 					params: queryParams ?? null,
 					timeout,
@@ -109,7 +107,7 @@ export function useService({ key, baseUrl }: IUseService) {
 				queryParams,
 				restEndpoint,
 			}: IUseMutationsParams<TPayloadPost>) => {
-				const url = restEndpoint ? `${baseUrl}/${restEndpoint}` : baseUrl;
+				const url = restEndpoint ? `${baseUrl}${restEndpoint}` : baseUrl;
 				return await apiFormData.post(url, data ?? undefined, {
 					onUploadProgress,
 					params: queryParams ?? null,
@@ -139,7 +137,7 @@ export function useService({ key, baseUrl }: IUseService) {
 				restEndpoint,
 				queryParams,
 			}: IUseMutationsParams<TPayloadPut>) => {
-				const url = restEndpoint ? `${baseUrl}/${restEndpoint}` : baseUrl;
+				const url = restEndpoint ? `${baseUrl}${restEndpoint}` : baseUrl;
 				return await api.put(url, data ?? undefined, {
 					params: queryParams ?? null,
 				});
@@ -166,7 +164,7 @@ export function useService({ key, baseUrl }: IUseService) {
 				restEndpoint,
 				queryParams,
 			}: IUseMutationsParams<TPayloadPut>) => {
-				const url = restEndpoint ? `${baseUrl}/${restEndpoint}` : baseUrl;
+				const url = restEndpoint ? `${baseUrl}${restEndpoint}` : baseUrl;
 				return await api.patch(url, data ?? undefined, {
 					params: queryParams ?? null,
 				});

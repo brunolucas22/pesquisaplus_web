@@ -6,6 +6,7 @@ import App from '../App';
 import { PrivateRouteComponent } from '../components/PrivateRouterComponent';
 
 const UsuariosPage = lazy(() => import('../pages/UsuariosPage'));
+const ProjectsPage = lazy(() => import('../pages/ProjectPage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 const ConquistasPage = lazy(() => import('../pages/ConquistasPage'));
 const LoginPage = lazy(() => import('../pages/LoginPage'));
@@ -23,6 +24,10 @@ export const router = createBrowserRouter([
 			</PrivateRouteComponent>
 		),
 		children: [
+			{
+				path: '/projects/*',
+				element: <ProjectsPage />,
+			},
 			{
 				path: '/usuarios/*',
 				element: <UsuariosPage />,

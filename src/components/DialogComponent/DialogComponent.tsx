@@ -7,6 +7,7 @@ export interface DialogComponentProps {
 	message?: string;
 	buttonLabel?: string;
 	func: () => void;
+	cancel?: () => void;
 	icon?: string;
 	severity?: string;
 }
@@ -32,6 +33,15 @@ export const DialogComponent = forwardRef((_, ref) => {
 				return 'p-button';
 		}
 	};
+
+	const getButtonColorCancel = () => {
+		switch (configDialog?.severity) {
+			case 'error':
+				return 'p-button';
+			case 'success':
+				return 'p-button-danger';
+		}
+	};
 	const getIconColor = () => {
 		switch (configDialog?.severity) {
 			case 'error':
@@ -47,7 +57,7 @@ export const DialogComponent = forwardRef((_, ref) => {
 	return (
 		<div>
 			<Dialog
-				style={{ width: '450px', borderTop: '6px solid #B00020' }}
+				style={{ width: '450px', borderTop: '6px solid #EA4359' }}
 				headerStyle={{
 					borderTopLeftRadius: '0px',
 					borderTopRightRadius: '0px',
@@ -71,11 +81,11 @@ export const DialogComponent = forwardRef((_, ref) => {
 							style={{ fontSize: '3rem' }}
 						></i>
 						<div
-							className="text-justify"
+							className="text-center m-3"
 							dangerouslySetInnerHTML={{ __html: useSanitize() }}
 						/>
 					</div>
-					<div className="mt-2 flex gap-2">
+					<div className="mt-2 flex justify-content-center gap-2 w-full">
 						<Button
 							onClick={() => {
 								configDialog?.func();
@@ -83,8 +93,19 @@ export const DialogComponent = forwardRef((_, ref) => {
 							}}
 							type="button"
 							label={configDialog?.buttonLabel || 'OK'}
-							className={`${getButtonColor()} w-full`}
+							className={`${getButtonColor()} w-6`}
 						/>
+						{configDialog?.cancel && (
+							<Button
+								onClick={() => {
+									configDialog?.cancel && configDialog?.cancel();
+									setIsVisible(false);
+								}}
+								type="button"
+								label={'Cancelar'}
+								className={`${getButtonColorCancel()} w-6`}
+							/>
+						)}
 					</div>
 				</div>
 			</Dialog>

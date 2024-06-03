@@ -1,4 +1,3 @@
-// import logo from '../../Assets/images/logo_black.png';
 import { LoginPageForm } from './Components/LoginPageForm';
 import './LoginPage.scss';
 

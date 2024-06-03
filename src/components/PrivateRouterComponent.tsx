@@ -1,5 +1,4 @@
 import { Navigate } from 'react-router-dom';
-import { api } from '../config/axios';
 
 type PrivateRouteComponentProps = {
 	children: JSX.Element;
@@ -8,7 +7,7 @@ type PrivateRouteComponentProps = {
 export const PrivateRouteComponent = ({
 	children,
 }: PrivateRouteComponentProps) => {
-	const token = api.defaults.headers.common['Authorization'];
+	const token = sessionStorage.getItem('LoginResponseDTO');
 
 	return token ? children : <Navigate to="/login" />;
 };

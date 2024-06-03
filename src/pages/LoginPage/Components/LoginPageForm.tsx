@@ -6,7 +6,7 @@ import { Password } from 'primereact/password';
 import { classNames } from 'primereact/utils';
 import { Controller, FieldValues, useForm } from 'react-hook-form';
 import { FaFacebook, FaInstagram, FaYoutube } from 'react-icons/fa';
-import { NavLink, To, useNavigate } from 'react-router-dom';
+import { NavLink, To } from 'react-router-dom';
 import logo from '../../../Assets/images/logo_black.png';
 import { ErrorMessageFormComponent } from '../../../components/ErrorMessageFormComponent';
 import '../LoginPage.scss';
@@ -22,20 +22,11 @@ export const LoginPageForm = () => {
 
 	const { mutateAsync: onPost } = postLogin();
 
-	const navigate = useNavigate();
-
 	const onSubmit = async (data: FieldValues) => {
 		try {
-			await onPost(
-				{
-					data: { ...data },
-				},
-				{
-					onSuccess: () => {
-						navigate('/', { replace: true });
-					},
-				}
-			);
+			await onPost({
+				data: { ...data },
+			});
 		} catch (err) {
 			return console.log(err);
 		}
@@ -79,7 +70,7 @@ export const LoginPageForm = () => {
 							required: true,
 							pattern: {
 								value: /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,4}$/,
-								message: 'Digite um Endereço de E-mail Válido',
+								message: 'Digite um Endereço de E-mail Válido.',
 							},
 						})}
 					/>
