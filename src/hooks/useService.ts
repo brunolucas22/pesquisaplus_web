@@ -11,6 +11,7 @@ import {
 	useMutation,
 	useQuery,
 } from '@tanstack/react-query';
+import { ITableConfig } from './useTableConfig/interface';
 
 export type TFormatResponseFunction = <TDataResponse, TFormatResponse>(
 	data: TDataResponse
@@ -41,6 +42,25 @@ export interface IUseMutationsParams<T> {
 }
 
 export function useService({ key, baseUrl }: IUseService) {
+	function useGetTableAll<TDataResponse>(
+		params: ITableConfig,
+		options?: UseQueryOptions<unknown, unknown, unknown, string[]>,
+		restEndpoint?: string
+	) {
+		return useQuery<any, any, any, any[]>(
+			{
+				...options,
+				queryKey: [...key, params],
+				queryFn: async () => {
+					const url = restEndpoint ? `${baseUrl}${restEndpoint}` : baseUrl;
+					const result = await api.post<TDataResponse>(url, params);
+					return result.data;
+				},
+			},
+			queryClient
+		);
+	}
+
 	function useGet<TDataResponse>(
 		restEndpoint: string,
 		options?: UseQueryOptions<unknown, unknown, unknown, string[]>,
@@ -208,5 +228,6 @@ export function useService({ key, baseUrl }: IUseService) {
 		usePut,
 		useDelete,
 		usePatch,
+		useGetTableAll,
 	};
 }

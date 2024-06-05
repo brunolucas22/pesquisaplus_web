@@ -1,5 +1,6 @@
 /* eslint-disable react-hooks/rules-of-hooks */
 import { useService } from '@src/hooks/useService';
+import { ITableConfig } from '@src/hooks/useTableConfig/interface';
 import { baseURLs } from '@src/utils/baseUrls';
 
 export const postProject = () => {
@@ -11,15 +12,15 @@ export const postProject = () => {
 	return service.usePost({ mutationKey: ['postProject'] });
 };
 
-export const getListProject = () => {
+export const getListProject = (tableConfig: ITableConfig) => {
 	const service = useService({
-		key: ['crudProject'],
+		key: ['crudProject', 'TableCrudProject'],
 		baseUrl: baseURLs.project,
 	});
 
-	return service.useGet('', {
+	return service.useGetTableAll(tableConfig, {
 		enabled: true,
-		queryKey: ['crudProject'],
+		queryKey: ['TableCrudProject'],
 	});
 };
 

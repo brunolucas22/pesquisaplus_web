@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { useGlobalLoadingActive } from '@src/store/ducks/GlobalLoadingActive';
 import { useIsFetching, useIsMutating } from '@tanstack/react-query';
 import { ProgressSpinner } from 'primereact/progressspinner';
@@ -9,10 +10,13 @@ export const GlobalLoalding = () => {
 	const excludedMutationsKeys: string[] = [];
 	const activeLoading = useSelector(useGlobalLoadingActive);
 
-	const predicate = (exclude: Array<string>, keys: Array<string>) => {
+	const predicate = (exclude: Array<string>, keys: any[]) => {
 		const set1 = new Set(exclude);
-		for (const key of keys) {
+		const keysString = keys.filter((key) => typeof key === 'string');
+		for (const key of keysString) {
+			console.log(key);
 			if (set1.has(key)) {
+				// || key?.includes('TableCrud')) {
 				return false;
 			}
 		}
@@ -22,14 +26,11 @@ export const GlobalLoalding = () => {
 	const sum =
 		useIsFetching({
 			predicate: (key) =>
-				predicate(excludedQueryKeys, key.queryKey as Array<string>),
+				predicate(excludedQueryKeys, key.queryKey as Array<any>),
 		}) +
 		useIsMutating({
 			predicate: (key) =>
-				predicate(
-					excludedMutationsKeys,
-					key.options.mutationKey as Array<string>
-				),
+				predicate(excludedMutationsKeys, key.options.mutationKey as Array<any>),
 		});
 
 	const isLoading = sum != 0 || activeLoading;

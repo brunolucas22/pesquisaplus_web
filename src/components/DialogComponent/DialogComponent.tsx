@@ -57,7 +57,11 @@ export const DialogComponent = forwardRef((_, ref) => {
 	return (
 		<div>
 			<Dialog
-				style={{ width: '450px', borderTop: '6px solid #EA4359' }}
+				style={{
+					width: '450px',
+					borderTop: '6px solid #EA4359',
+					zIndex: '10000 !important',
+				}}
 				headerStyle={{
 					borderTopLeftRadius: '0px',
 					borderTopRightRadius: '0px',

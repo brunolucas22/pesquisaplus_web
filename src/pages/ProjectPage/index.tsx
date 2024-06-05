@@ -2,6 +2,7 @@ import CrudComponent from '@src/components/CrudComponent';
 import { TColumnsTable } from '@src/components/CrudComponent/CrudComponentTable';
 import { showErrorDialog } from '@src/components/DialogComponent/hooks';
 import { showToastSuccess } from '@src/components/GlobalToast';
+import { useTableConfig } from '@src/hooks/useTableConfig/useTableConfig';
 import {
 	TCrudComponentMode,
 	setCrudComponentMode,
@@ -24,8 +25,8 @@ const ProjectsPage = () => {
 	const mode = useSelector(useCrudComponentMode);
 
 	const dispatch = useDispatch();
-
-	const { data } = getListProject();
+	const { setTableConfig, tableConfig } = useTableConfig({});
+	const { data } = getListProject(tableConfig);
 	const { mutateAsync: onPost } = postProject();
 	const { mutateAsync: onPut } = putProject();
 	const { mutateAsync: onDelete } = deleteProject();
@@ -130,8 +131,10 @@ const ProjectsPage = () => {
 
 			<CrudComponent.Table<IProject>
 				keyTable="id"
+				setTableConfig={setTableConfig}
+				tableConfig={tableConfig}
 				columnsTable={columnsTable}
-				data={data}
+				responseListDTO={data}
 				buttons={buttonsTable}
 				rowSelected={projetoSelecionado}
 			/>

@@ -1,8 +1,13 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import {
+	IResponseListDTO,
+	ITableConfig,
+} from '@src/hooks/useTableConfig/interface';
 import { Column } from 'primereact/column';
 import {
 	DataTable,
 	DataTableSelectionSingleChangeEvent,
+	DataTableStateEvent,
 } from 'primereact/datatable';
 import paginatorTemplate from './CrudComponentPaginatorTemplate';
 
@@ -14,13 +19,15 @@ export type TColumnsTable = {
 
 type CrudComponentTableProps<Type> = {
 	columnsTable: TColumnsTable[];
-	data: any[];
+	responseListDTO?: IResponseListDTO<Type>;
 	rowSelected?: any;
 	keyTable: string;
 	title?: string;
 	setRowSelected?: React.Dispatch<any>;
 	buttons?: (rowSelected: Type) => JSX.Element;
 	notSelected?: boolean;
+	tableConfig: ITableConfig;
+	setTableConfig: (event: DataTableStateEvent) => void;
 };
 
 export function CrudComponentTable<Type>({
@@ -39,9 +46,9 @@ export function CrudComponentTable<Type>({
 							className="py-2"
 							body={(e) => {
 								return e[col.field]
-									.split('\n')
+									?.split('\n')
 									.map((line: string, index: number) => {
-										const list = e[col.field].split('\n') as Array<any>;
+										const list = e[col.field]?.split('\n') as Array<any>;
 										const isMargin = list.length > 1 && index != 0;
 										return (
 											<div className={`${isMargin && 'mt-2'}`} key={index}>
@@ -68,8 +75,14 @@ export function CrudComponentTable<Type>({
 				paginator
 				scrollable={true}
 				metaKeySelection={false}
-				rows={5}
-				value={props.data}
+				rows={10}
+				lazy
+				onSort={props.setTableConfig}
+				onPage={props.setTableConfig}
+				sortField={props.tableConfig?.sortField}
+				sortOrder={props.tableConfig?.sortOrder}
+				totalRecords={props.responseListDTO?.totalElements || 0}
+				value={props.responseListDTO?.data || []}
 				selectionMode={props.notSelected ? undefined : 'single'}
 				selection={props.rowSelected}
 				onSelectionChange={(e: DataTableSelectionSingleChangeEvent<any>) => {
