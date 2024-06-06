@@ -1,6 +1,7 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { DataTableStateEvent } from 'primereact/datatable';
 import { useState } from 'react';
-import { ITableConfig } from './interface';
+import { IFilterTableConfig, ITableConfig } from './interface';
 
 export const useTableConfig = ({ ...props }: ITableConfig) => {
 	const config: ITableConfig = {
@@ -21,8 +22,26 @@ export const useTableConfig = ({ ...props }: ITableConfig) => {
 		}));
 	};
 
+	const transformObjectToArray = (
+		filters: Record<string, any>
+	): IFilterTableConfig[] => {
+		return Object.entries(filters).map(([key, value]) => ({
+			field: key,
+			value: value,
+			matchMode: typeof value === 'string' ? 'CONTAINS' : 'EQUAL',
+		}));
+	};
+
+	const setFilter = (filters: Record<string, any>) => {
+		setTableConfig((prev) => ({
+			...prev,
+			filters: transformObjectToArray(filters),
+		}));
+	};
+
 	return {
 		tableConfig,
 		setTableConfig: setConfig,
+		setFilter,
 	};
 };

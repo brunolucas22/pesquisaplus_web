@@ -14,13 +14,25 @@ export const postProject = () => {
 
 export const getListProject = (tableConfig: ITableConfig) => {
 	const service = useService({
-		key: ['crudProject', 'TableCrudProject'],
+		key: ['crudProject'],
 		baseUrl: baseURLs.project,
 	});
 
 	return service.useGetTableAll(tableConfig, {
 		enabled: true,
 		queryKey: ['TableCrudProject'],
+	});
+};
+
+export const getDetailProject = (id: string) => {
+	const service = useService({
+		key: ['crudProject'],
+		baseUrl: baseURLs.project,
+	});
+
+	return service.useGet(`${id}/`, {
+		enabled: false,
+		queryKey: ['GetProject'],
 	});
 };
 

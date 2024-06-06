@@ -27,7 +27,7 @@ export const showSuccessDialog = (configDialog: DialogComponentProps) => {
 	if (!getDialogRef.current) return;
 	const defaultConfigOption: DialogComponentProps = {
 		...configDialog,
-		icon: 'pi pi-check-circle',
+		icon: 'pi pi-check-square',
 		severity: 'success',
 	};
 	getDialogRef.current.show(defaultConfigOption);

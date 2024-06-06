@@ -69,7 +69,7 @@ export const Interceptors = ({ ...props }: InterceptorProps) => {
 						window.location.href = '/login';
 					},
 				});
-				return;
+				throw new Error('ERR_NETWORK');
 			}
 
 			try {

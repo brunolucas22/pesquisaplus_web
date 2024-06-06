@@ -43,7 +43,7 @@ export function CrudComponentTable<Type>({
 							field={col.field}
 							header={col.header}
 							sortable
-							className="py-2"
+							className="py-0"
 							body={(e) => {
 								return e[col.field]
 									?.split('\n')
@@ -69,16 +69,17 @@ export function CrudComponentTable<Type>({
 			<DataTable
 				emptyMessage={'Nenhum Registro Encontrado.'}
 				paginatorTemplate={paginatorTemplate}
-				pageLinkSize={10}
 				paginatorLeft
-				showGridlines
+				className="rounded-datatable"
 				paginator
-				scrollable={true}
+				scrollable
+				showGridlines
 				metaKeySelection={false}
-				rows={10}
+				rows={5}
 				lazy
 				onSort={props.setTableConfig}
 				onPage={props.setTableConfig}
+				first={(props.tableConfig?.page ?? 0) * 5}
 				sortField={props.tableConfig?.sortField}
 				sortOrder={props.tableConfig?.sortOrder}
 				totalRecords={props.responseListDTO?.totalElements || 0}

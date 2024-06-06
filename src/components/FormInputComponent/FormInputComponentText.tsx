@@ -1,10 +1,15 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
+import {
+	TCrudComponentMode,
+	useCrudComponentMode,
+} from '@src/store/ducks/CrudComponentMode';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { classNames } from 'primereact/utils';
 import { FieldErrors, FieldValues, Path } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { ErrorMessageFormComponent } from '../ErrorMessageFormComponent';
 
 type FormInputComponentTextProps<Interface extends FieldValues> = {
@@ -23,10 +28,20 @@ type FormInputComponentTextProps<Interface extends FieldValues> = {
 export function FormInputComponentText<Interface extends FieldValues>({
 	...props
 }: FormInputComponentTextProps<Interface>) {
+	const crudComponentMode = useSelector(useCrudComponentMode);
+
 	return (
-		<div className={classNames(props.className, 'w-full flex flex-column')}>
+		<div
+			className={classNames(
+				props.className,
+				'w-full flex flex-column align-items-start'
+			)}
+		>
 			{props.label && (
-				<label htmlFor={props.keyField} className="font-bold block mb-2">
+				<label
+					htmlFor={props.keyField}
+					className="font-bold block mb-2 text-color"
+				>
 					{props.label}{' '}
 					{props.required && <span className="text-red-500">*</span>}
 				</label>
@@ -58,7 +73,9 @@ export function FormInputComponentText<Interface extends FieldValues>({
 							},
 							'border-round-right'
 						)}
-						disabled={props.readOnly}
+						disabled={
+							props.readOnly || crudComponentMode === TCrudComponentMode.info
+						}
 						{...props.register}
 					/>
 				) : (
@@ -68,7 +85,9 @@ export function FormInputComponentText<Interface extends FieldValues>({
 						className={classNames({
 							'p-invalid': props.errors[`${props.keyField}`],
 						})}
-						disabled={props.readOnly}
+						disabled={
+							props.readOnly || crudComponentMode === TCrudComponentMode.info
+						}
 						{...props.register}
 					/>
 				)}

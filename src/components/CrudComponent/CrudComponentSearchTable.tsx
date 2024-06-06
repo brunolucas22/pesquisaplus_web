@@ -1,4 +1,5 @@
 import { Button } from 'primereact/button';
+import { Toolbar } from 'primereact/toolbar';
 
 type CrudComponentSearchTableProps = {
 	handleFilter: () => void;
@@ -10,39 +11,37 @@ export const CrudComponentSearchTable = ({
 	...props
 }: CrudComponentSearchTableProps) => {
 	return (
-		<>
-			<div className="card mb-5 mt-2">
-				<h4>{props.searchs}</h4>
-				<div className="formgroup-inline">
-					{props.searchs.map((search: JSX.Element, index: number) => (
-						<div className="field" key={index}>
-							{search}
-						</div>
-					))}
-					<div
-						className="field flex align-items-end"
-						style={{ height: '63.2px' }}
-					>
-						<Button
-							label={'Pesquisar'}
-							icon="pi pi-search"
-							onClick={props.handleFilter}
-							style={{ width: '8rem' }}
-						/>
+		<form onSubmit={props.handleFilter}>
+			<Toolbar
+				className="p-3 py-0"
+				start={
+					<div className="formgroup-inline ">
+						{props.searchs.map((search: JSX.Element, index: number) => (
+							<div className="field pt-3" key={index}>
+								{search}
+							</div>
+						))}
 					</div>
-					<div
-						className="field flex align-items-end"
-						style={{ height: '63.2px' }}
-					>
+				}
+				end={
+					<div className="flex flex-row  gap-2">
 						<Button
-							label={'Limpar'}
+							tooltip={'Pesquisar'}
+							tooltipOptions={{ position: 'top' }}
+							icon="pi pi-search"
+							severity="success"
+						/>
+						<Button
+							tooltip={'Limpar'}
+							tooltipOptions={{ position: 'top' }}
+							type="button"
 							icon="pi pi-eraser"
+							severity="warning"
 							onClick={props.clearFilter}
-							style={{ width: '8rem' }}
 						></Button>
 					</div>
-				</div>
-			</div>
-		</>
+				}
+			/>
+		</form>
 	);
 };

@@ -14,9 +14,7 @@ export const GlobalLoalding = () => {
 		const set1 = new Set(exclude);
 		const keysString = keys.filter((key) => typeof key === 'string');
 		for (const key of keysString) {
-			console.log(key);
-			if (set1.has(key)) {
-				// || key?.includes('TableCrud')) {
+			if (set1.has(key) || key?.includes('TableCrud')) {
 				return false;
 			}
 		}

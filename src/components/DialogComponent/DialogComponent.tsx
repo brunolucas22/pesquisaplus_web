@@ -59,7 +59,9 @@ export const DialogComponent = forwardRef((_, ref) => {
 			<Dialog
 				style={{
 					width: '450px',
-					borderTop: '6px solid #EA4359',
+					borderTop: `6px solid ${
+						configDialog?.severity === 'error' ? '#EA4359' : '#04B6E1'
+					}`,
 					zIndex: '10000 !important',
 				}}
 				headerStyle={{

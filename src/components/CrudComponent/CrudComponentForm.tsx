@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import {
@@ -8,7 +9,7 @@ import {
 import { Button } from 'primereact/button';
 import { Sidebar } from 'primereact/sidebar';
 import { Dispatch, SetStateAction, useEffect } from 'react';
-import { FieldValues, UseFormReturn, useForm } from 'react-hook-form';
+import { FieldValues, Path, UseFormReturn, useForm } from 'react-hook-form';
 import { useDispatch, useSelector } from 'react-redux';
 
 type CrudComponentFormFormProps<Type extends FieldValues> = {
@@ -18,6 +19,7 @@ type CrudComponentFormFormProps<Type extends FieldValues> = {
 
 type CrudComponentFormProps<Type extends FieldValues> = {
 	rowSelected?: Type;
+
 	setRowSelected?: Dispatch<SetStateAction<Type | undefined>>;
 	onSubmit: (data: Type) => Promise<void> | void;
 	form?: ({ ...props }: CrudComponentFormFormProps<Type>) => JSX.Element;
@@ -29,33 +31,40 @@ export function CrudComponentForm<Type extends FieldValues>({
 	const crudComponentMode = useSelector(useCrudComponentMode);
 	const dispatch = useDispatch();
 
-	const hookForm = useForm<Type>();
-
-	useEffect(() => {
-		if (props.rowSelected) {
-			hookForm.reset(props.rowSelected);
+	const visibility: () => boolean = () => {
+		switch (crudComponentMode) {
+			case TCrudComponentMode.edit:
+				return true;
+			case TCrudComponentMode.info:
+				return true;
+			case TCrudComponentMode.add:
+				return true;
+			default:
+				return false;
 		}
-		// eslint-disable-next-line react-hooks/exhaustive-deps
-	}, [props.rowSelected]);
+	};
 
-	return (
-		<Sidebar
-			className="w-12 sm:w-6"
-			visible={
-				crudComponentMode === TCrudComponentMode.add ||
-				crudComponentMode === TCrudComponentMode.edit
-			}
-			position="right"
-			onHide={() => {
-				dispatch(setCrudComponentMode(TCrudComponentMode.search));
-				props.setRowSelected && props.setRowSelected(undefined);
-			}}
-		>
+	const FormInterceptor = () => {
+		const hookForm = useForm<Type>();
+
+		const reset = (values?: Type) => {
+			Object.entries(values ?? hookForm.getValues()).map(([key, value]) => {
+				hookForm.setValue(key as Path<Type>, values ? value : undefined);
+			});
+		};
+
+		useEffect(() => {
+			reset(props.rowSelected);
+			return () => {
+				hookForm.reset();
+			};
+		}, []);
+
+		return (
 			<form
 				onSubmit={hookForm.handleSubmit(async (data) => {
 					await props.onSubmit(data);
 					dispatch(setCrudComponentMode(TCrudComponentMode.search));
-					props.setRowSelected && props.setRowSelected(undefined);
 				})}
 				className="w-full h-full flex flex-column justify-content-between"
 			>
@@ -71,7 +80,7 @@ export function CrudComponentForm<Type extends FieldValues>({
 					<div className="mt-2 flex justify-content-center gap-2 w-full">
 						<Button
 							label={
-								crudComponentMode !== TCrudComponentMode.add
+								crudComponentMode === TCrudComponentMode.add
 									? 'Cadastrar'
 									: 'Salvar'
 							}
@@ -84,7 +93,7 @@ export function CrudComponentForm<Type extends FieldValues>({
 							label="Limpar"
 							className="w-full"
 							onClick={() => {
-								hookForm.reset();
+								reset(undefined);
 							}}
 						/>
 
@@ -101,6 +110,20 @@ export function CrudComponentForm<Type extends FieldValues>({
 					</div>
 				)}
 			</form>
+		);
+	};
+
+	return (
+		<Sidebar
+			className="w-12 sm:w-6"
+			visible={visibility()}
+			position="right"
+			onHide={() => {
+				dispatch(setCrudComponentMode(TCrudComponentMode.search));
+				props.setRowSelected && props.setRowSelected(undefined);
+			}}
+		>
+			{visibility() && <FormInterceptor />}
 		</Sidebar>
 	);
 }

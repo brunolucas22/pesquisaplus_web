@@ -1,7 +1,9 @@
+/* eslint-disable no-mixed-spaces-and-tabs */
 import FormInputComponent from '@src/components/FormInputComponent';
 import { Dispatch, SetStateAction } from 'react';
 import { GiDuration } from 'react-icons/gi';
 
+import moment from 'moment';
 import { UseFormReturn } from 'react-hook-form';
 import { FaProjectDiagram } from 'react-icons/fa';
 import { IProject } from '../interface';
@@ -19,10 +21,18 @@ export const ProjectForm = ({ ...props }: ProjectFormProps) => {
 				label="Nome do Projeto"
 				keyField="name_project"
 				icon={<FaProjectDiagram />}
-				required={true}
+				required
 				register={props.register('name_project', { required: true })}
 			/>
-
+			<FormInputComponent.Calendar<IProject>
+				control={props.control}
+				errors={props.formState?.errors}
+				keyField="start_date_project"
+				icon={<GiDuration />}
+				label="Data de Início do Projeto"
+				placehoder="Início do Projeto"
+				rules={{ required: true }}
+			/>
 			<div className="flex md:flex-row flex-column w-full">
 				<FormInputComponent.Number<IProject>
 					control={props.control}
@@ -53,8 +63,22 @@ export const ProjectForm = ({ ...props }: ProjectFormProps) => {
 				label="Descrição do Projeto"
 				keyField="description_project"
 				icon="pi-file-edit"
+				required
 				register={props.register('description_project', { required: true })}
 			/>
+			{props.rowSelected?.status_project && (
+				<p className="font-bold block mb-2 text-color">
+					{'Projeto Finalizado no Dia: '}
+					<span className="text-green-500">
+						{props.rowSelected?.final_date_project
+							? moment(
+									props.rowSelected?.final_date_project,
+									'YYYY-MM-DD'
+							  ).format('DD/MM/YYYY')
+							: props.rowSelected?.expected_final_date_project}
+					</span>
+				</p>
+			)}
 		</div>
 	);
 };

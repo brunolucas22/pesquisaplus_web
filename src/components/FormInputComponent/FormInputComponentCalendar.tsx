@@ -4,7 +4,8 @@ import {
 	TCrudComponentMode,
 	useCrudComponentMode,
 } from '@src/store/ducks/CrudComponentMode';
-import { InputNumber } from 'primereact/inputnumber';
+import moment from 'moment';
+import { Calendar } from 'primereact/calendar';
 import { classNames } from 'primereact/utils';
 import {
 	Control,
@@ -17,7 +18,7 @@ import {
 import { useSelector } from 'react-redux';
 import { ErrorMessageFormComponent } from '../ErrorMessageFormComponent';
 
-type FormInputComponentNumberProps<Interface extends FieldValues> = {
+type FormInputComponentCalendarProps<Interface extends FieldValues> = {
 	readOnly?: boolean;
 	control: Control<Interface, any>;
 	keyField: Path<Interface>;
@@ -26,17 +27,26 @@ type FormInputComponentNumberProps<Interface extends FieldValues> = {
 	label?: string;
 	placehoder?: string;
 	icon?: string | JSX.Element;
-	currency?: boolean;
 	rules?: Omit<
 		RegisterOptions<Interface, Path<Interface>>,
 		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
 	>;
 };
 
-export function FormInputComponentNumber<Interface extends FieldValues>({
+export function FormInputComponentCalendar<Interface extends FieldValues>({
 	...props
-}: FormInputComponentNumberProps<Interface>) {
+}: FormInputComponentCalendarProps<Interface>) {
 	const crudComponentMode = useSelector(useCrudComponentMode);
+
+	const formatDate = (date: any) => {
+		const result = `${moment(date).format('YYYY-MM-DD')}`;
+		return result;
+	};
+	const unformatDate = (dateString: string) => {
+		const result = moment(dateString, 'YYYY-MM-DD').toDate();
+		return result;
+	};
+
 	return (
 		<div className={classNames(props.className, 'w-full flex flex-column')}>
 			<Controller
@@ -73,26 +83,20 @@ export function FormInputComponentNumber<Interface extends FieldValues>({
 											props.icon
 										))}
 								</span>
-								<InputNumber
+								<Calendar
 									disabled={
 										props.readOnly ||
 										crudComponentMode === TCrudComponentMode.info
 									}
-									className="w-full"
-									name={props.keyField}
-									placeholder={props.placehoder || props.label}
-									inputId={props.keyField}
-									value={value}
+									value={unformatDate(value)}
+									className="w-full md:w-23rem"
+									locale="pt_BR"
+									dateFormat="dd/mm/yy"
+									placeholder={props.placehoder}
 									onChange={(e) => {
-										onChange(e.value);
+										onChange(formatDate(e.target.value));
 									}}
-									{...(props.currency
-										? {
-												mode: 'currency',
-												currency: 'BRL',
-												locale: 'pt-BR',
-										  }
-										: { useGrouping: false })}
+									readOnlyInput
 								/>
 							</div>
 						</div>

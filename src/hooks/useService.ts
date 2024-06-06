@@ -2,8 +2,7 @@
 import { api, apiFormData } from '@config/axios';
 import { queryClient } from '@config/queryClient';
 
-import { AxiosInstance, AxiosProgressEvent } from 'axios';
-
+import { setGlobalLoadingActive } from '@src/store/ducks/GlobalLoadingActive';
 import {
 	UseMutationOptions,
 	UseQueryOptions,
@@ -11,6 +10,8 @@ import {
 	useMutation,
 	useQuery,
 } from '@tanstack/react-query';
+import { AxiosInstance, AxiosProgressEvent } from 'axios';
+import { useDispatch } from 'react-redux';
 import { ITableConfig } from './useTableConfig/interface';
 
 export type TFormatResponseFunction = <TDataResponse, TFormatResponse>(
@@ -47,14 +48,41 @@ export function useService({ key, baseUrl }: IUseService) {
 		options?: UseQueryOptions<unknown, unknown, unknown, string[]>,
 		restEndpoint?: string
 	) {
+		const dispatch = useDispatch();
 		return useQuery<any, any, any, any[]>(
 			{
 				...options,
-				queryKey: [...key, params],
+				queryKey: [...key, ...(options?.queryKey ?? []), params],
 				queryFn: async () => {
 					const url = restEndpoint ? `${baseUrl}${restEndpoint}` : baseUrl;
-					const result = await api.post<TDataResponse>(url, params);
-					return result.data;
+					let response: boolean;
+
+					const timeoutPromise = new Promise<null>(() => {
+						const timeoutId = setTimeout(() => {
+							if (!response) {
+								dispatch(setGlobalLoadingActive(true));
+							}
+						}, 1000);
+
+						return () => clearTimeout(timeoutId);
+					});
+
+					try {
+						const result = await Promise.race([
+							api.post<TDataResponse>(url, params),
+							timeoutPromise,
+						]);
+
+						if (result) {
+							response = true;
+							dispatch(setGlobalLoadingActive(false));
+							console.log('oxe');
+							return result.data;
+						}
+					} catch (error) {
+						dispatch(setGlobalLoadingActive(false));
+						console.error({ error });
+					}
 				},
 			},
 			queryClient

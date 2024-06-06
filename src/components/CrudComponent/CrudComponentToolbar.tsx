@@ -9,5 +9,7 @@ type CrudComponentToolbarProps = {
 export const CrudComponentToolbar = ({
 	...props
 }: CrudComponentToolbarProps) => {
-	return <Toolbar start={props.start} end={props.end} className="p-3 my-3" />;
+	return (
+		<Toolbar start={props.start} end={props.end} className="p-3 my-3 m-0" />
+	);
 };

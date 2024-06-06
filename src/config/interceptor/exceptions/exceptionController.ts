@@ -51,6 +51,7 @@ export const serverErrorHandle = async (responseError: any) => {
 			// if (showDebugGlobal) error = `?error=${JSON.stringify(responseError)}`;
 			// window.location.href = `/login${error}`;
 			console.log(responseError.type);
+			throw new Error(errorMessage);
 			break;
 	}
 };

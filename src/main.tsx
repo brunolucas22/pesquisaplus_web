@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/rules-of-hooks */
 import 'primeflex/primeflex.scss';
 import 'primeflex/themes/primeone-dark.css';
 import 'primeflex/themes/primeone-light.css';
@@ -17,6 +18,9 @@ import { queryClient } from './config/queryClient.ts';
 import './index.scss';
 import { router } from './routers/index.tsx';
 import store from './store/ducks/index.ts';
+import { useLocalePT } from './utils/useLocalePT.ts';
+
+useLocalePT();
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
 	<QueryClientProvider client={queryClient}>
