@@ -1,3 +1,5 @@
+import { Navigate } from 'react-router-dom';
+
 type PrivateRouteComponentProps = {
 	children: JSX.Element;
 };
@@ -5,8 +7,7 @@ type PrivateRouteComponentProps = {
 export const PrivateRouteComponent = ({
 	children,
 }: PrivateRouteComponentProps) => {
-	// const token = sessionStorage.getItem('LoginResponseDTO');
+	const token = sessionStorage.getItem('LoginResponseDTO');
 
-	// return token ? children : <Navigate to="/login" />;
-	return children;
+	return token ? children : <Navigate to="/login" />;
 };
