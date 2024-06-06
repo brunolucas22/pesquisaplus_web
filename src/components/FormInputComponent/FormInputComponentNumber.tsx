@@ -1,9 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-	TCrudComponentMode,
-	useCrudComponentMode,
-} from '@src/store/ducks/CrudComponentMode';
+import { useCrudComponentMode } from '@src/store/ducks/CrudComponentMode';
+import { EnumCrudComponentMode } from '@src/utils/enums/enumCrudComponentMode';
 import { InputNumber } from 'primereact/inputnumber';
 import { classNames } from 'primereact/utils';
 import {
@@ -76,7 +74,7 @@ export function FormInputComponentNumber<Interface extends FieldValues>({
 								<InputNumber
 									disabled={
 										props.readOnly ||
-										crudComponentMode === TCrudComponentMode.info
+										crudComponentMode === EnumCrudComponentMode.info
 									}
 									className="w-full"
 									name={props.keyField}

@@ -68,7 +68,7 @@ const UsuariosPage = () => {
 	// 						},
 	// 					});
 	// 					// setUsuarioSelecionado(usuario);
-	// 					// dispatch(setCrudComponentMode(TCrudComponentMode.edit));
+	// 					// dispatch(setCrudComponentMode(EnumCrudComponentMode.edit));
 	// 				}}
 	// 			/>
 	// 		</>

@@ -1,4 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { EnumMatchMode } from '@src/utils/enums/enumMatchMode';
 import { DataTableStateEvent } from 'primereact/datatable';
 import { useState } from 'react';
 import { IFilterTableConfig, ITableConfig } from './interface';
@@ -28,7 +29,10 @@ export const useTableConfig = ({ ...props }: ITableConfig) => {
 		return Object.entries(filters).map(([key, value]) => ({
 			field: key,
 			value: value,
-			matchMode: typeof value === 'string' ? 'CONTAINS' : 'EQUAL',
+			matchMode:
+				typeof value === 'string'
+					? EnumMatchMode.CONTAINS
+					: EnumMatchMode.EQUAL,
 		}));
 	};
 

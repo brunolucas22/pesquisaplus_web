@@ -2,10 +2,10 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
 import {
-	TCrudComponentMode,
 	setCrudComponentMode,
 	useCrudComponentMode,
 } from '@src/store/ducks/CrudComponentMode';
+import { EnumCrudComponentMode } from '@src/utils/enums/enumCrudComponentMode';
 import { Button } from 'primereact/button';
 import { Sidebar } from 'primereact/sidebar';
 import { Dispatch, SetStateAction, useEffect } from 'react';
@@ -33,11 +33,11 @@ export function CrudComponentForm<Type extends FieldValues>({
 
 	const visibility: () => boolean = () => {
 		switch (crudComponentMode) {
-			case TCrudComponentMode.edit:
+			case EnumCrudComponentMode.edit:
 				return true;
-			case TCrudComponentMode.info:
+			case EnumCrudComponentMode.info:
 				return true;
-			case TCrudComponentMode.add:
+			case EnumCrudComponentMode.add:
 				return true;
 			default:
 				return false;
@@ -64,7 +64,7 @@ export function CrudComponentForm<Type extends FieldValues>({
 			<form
 				onSubmit={hookForm.handleSubmit(async (data) => {
 					await props.onSubmit(data);
-					dispatch(setCrudComponentMode(TCrudComponentMode.search));
+					dispatch(setCrudComponentMode(EnumCrudComponentMode.search));
 				})}
 				className="w-full h-full flex flex-column justify-content-between"
 			>
@@ -76,32 +76,34 @@ export function CrudComponentForm<Type extends FieldValues>({
 							...hookForm,
 						})}
 				</div>
-				{crudComponentMode !== TCrudComponentMode.info && (
+				{crudComponentMode !== EnumCrudComponentMode.info && (
 					<div className="mt-2 flex justify-content-center gap-2 w-full">
 						<Button
 							label={
-								crudComponentMode === TCrudComponentMode.add
+								crudComponentMode === EnumCrudComponentMode.add
 									? 'Cadastrar'
 									: 'Salvar'
 							}
 							className="w-full"
 							severity="success"
 						/>
-						<Button
-							severity="warning"
-							type="button"
-							label="Limpar"
-							className="w-full"
-							onClick={() => {
-								reset(undefined);
-							}}
-						/>
+						{crudComponentMode === EnumCrudComponentMode.add && (
+							<Button
+								severity="warning"
+								type="button"
+								label="Limpar"
+								className="w-full"
+								onClick={() => {
+									reset(undefined);
+								}}
+							/>
+						)}
 
 						<Button
 							severity="danger"
 							className="w-full"
 							onClick={() => {
-								dispatch(setCrudComponentMode(TCrudComponentMode.search));
+								dispatch(setCrudComponentMode(EnumCrudComponentMode.search));
 								props.setRowSelected && props.setRowSelected(undefined);
 							}}
 							type="button"
@@ -119,7 +121,7 @@ export function CrudComponentForm<Type extends FieldValues>({
 			visible={visibility()}
 			position="right"
 			onHide={() => {
-				dispatch(setCrudComponentMode(TCrudComponentMode.search));
+				dispatch(setCrudComponentMode(EnumCrudComponentMode.search));
 				props.setRowSelected && props.setRowSelected(undefined);
 			}}
 		>

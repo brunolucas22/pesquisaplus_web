@@ -1,24 +1,20 @@
 import { PayloadAction, createSlice } from '@reduxjs/toolkit';
+import { EnumCrudComponentMode } from '@src/utils/enums/enumCrudComponentMode';
 
 type stateProps = {
-	CrudComponentModeReducer: string;
+	CrudComponentModeReducer: EnumCrudComponentMode;
 };
 
-export const TCrudComponentMode = {
-	search: 'search',
-	delete: 'delete',
-	edit: 'edit',
-	add: 'add',
-	info: 'info',
-};
-
-const initialState = TCrudComponentMode.search;
+const initialState = EnumCrudComponentMode.search;
 
 const CrudComponentModeReducer = createSlice({
 	name: 'CrudComponentModeReducer',
 	initialState,
 	reducers: {
-		setCrudComponentMode: (_, { payload }: PayloadAction<string>) => {
+		setCrudComponentMode: (
+			_,
+			{ payload }: PayloadAction<EnumCrudComponentMode>
+		) => {
 			return payload;
 		},
 	},

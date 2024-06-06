@@ -1,7 +1,9 @@
+import { EnumMatchMode } from '@src/utils/enums/enumMatchMode';
+
 export interface IFilterTableConfig {
 	field: string;
 	value: string;
-	matchMode: 'CONTAINS' | 'EQUAL';
+	matchMode: EnumMatchMode;
 }
 
 export interface ITableConfig {

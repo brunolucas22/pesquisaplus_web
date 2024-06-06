@@ -1,9 +1,7 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import {
-	TCrudComponentMode,
-	useCrudComponentMode,
-} from '@src/store/ducks/CrudComponentMode';
+import { useCrudComponentMode } from '@src/store/ducks/CrudComponentMode';
+import { EnumCrudComponentMode } from '@src/utils/enums/enumCrudComponentMode';
 import moment from 'moment';
 import { Calendar } from 'primereact/calendar';
 import { classNames } from 'primereact/utils';
@@ -86,7 +84,7 @@ export function FormInputComponentCalendar<Interface extends FieldValues>({
 								<Calendar
 									disabled={
 										props.readOnly ||
-										crudComponentMode === TCrudComponentMode.info
+										crudComponentMode === EnumCrudComponentMode.info
 									}
 									value={unformatDate(value)}
 									className="w-full md:w-23rem"

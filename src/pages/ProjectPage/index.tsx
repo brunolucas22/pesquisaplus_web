@@ -8,10 +8,10 @@ import FormInputComponent from '@src/components/FormInputComponent';
 import { showToastSuccess } from '@src/components/GlobalToast';
 import { useTableConfig } from '@src/hooks/useTableConfig/useTableConfig';
 import {
-	TCrudComponentMode,
 	setCrudComponentMode,
 	useCrudComponentMode,
 } from '@src/store/ducks/CrudComponentMode';
+import { EnumCrudComponentMode } from '@src/utils/enums/enumCrudComponentMode';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { FaProjectDiagram } from 'react-icons/fa';
@@ -55,7 +55,7 @@ const ProjectsPage = () => {
 
 	const submit = async (data: IProject) => {
 		try {
-			if (mode === TCrudComponentMode.add) {
+			if (mode === EnumCrudComponentMode.add) {
 				await onPost({
 					restEndpoint: 'create/',
 					data: {
@@ -69,7 +69,7 @@ const ProjectsPage = () => {
 
 				return;
 			}
-			if (mode === TCrudComponentMode.edit && data && projetoSelecionado) {
+			if (mode === EnumCrudComponentMode.edit && data && projetoSelecionado) {
 				await onPut(
 					{
 						restEndpoint: `update/${data?.id}/`,
@@ -151,7 +151,7 @@ const ProjectsPage = () => {
 								...projeto,
 								...(response.data as IProject),
 							});
-							dispatch(setCrudComponentMode(TCrudComponentMode.info));
+							dispatch(setCrudComponentMode(EnumCrudComponentMode.info));
 						});
 					}}
 				/>
@@ -166,7 +166,7 @@ const ProjectsPage = () => {
 								...projeto,
 								...(response.data as IProject),
 							});
-							dispatch(setCrudComponentMode(TCrudComponentMode.edit));
+							dispatch(setCrudComponentMode(EnumCrudComponentMode.edit));
 						});
 					}}
 				/>
@@ -206,7 +206,7 @@ const ProjectsPage = () => {
 				start={
 					<CrudComponent.Button
 						onClick={() =>
-							dispatch(setCrudComponentMode(TCrudComponentMode.add))
+							dispatch(setCrudComponentMode(EnumCrudComponentMode.add))
 						}
 						label="Adicionar"
 					/>
@@ -221,7 +221,6 @@ const ProjectsPage = () => {
 
 			<CrudComponent.Table<IProject>
 				keyTable="id"
-				setRowSelected={setProjetoSelecionado}
 				setTableConfig={setTableConfig}
 				tableConfig={tableConfig}
 				columnsTable={columnsTable}

@@ -1,10 +1,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 
-import {
-	TCrudComponentMode,
-	useCrudComponentMode,
-} from '@src/store/ducks/CrudComponentMode';
+import { useCrudComponentMode } from '@src/store/ducks/CrudComponentMode';
+import { EnumCrudComponentMode } from '@src/utils/enums/enumCrudComponentMode';
 import { InputText } from 'primereact/inputtext';
 import { InputTextarea } from 'primereact/inputtextarea';
 import { classNames } from 'primereact/utils';
@@ -74,7 +72,7 @@ export function FormInputComponentText<Interface extends FieldValues>({
 							'border-round-right'
 						)}
 						disabled={
-							props.readOnly || crudComponentMode === TCrudComponentMode.info
+							props.readOnly || crudComponentMode === EnumCrudComponentMode.info
 						}
 						{...props.register}
 					/>
@@ -86,7 +84,7 @@ export function FormInputComponentText<Interface extends FieldValues>({
 							'p-invalid': props.errors[`${props.keyField}`],
 						})}
 						disabled={
-							props.readOnly || crudComponentMode === TCrudComponentMode.info
+							props.readOnly || crudComponentMode === EnumCrudComponentMode.info
 						}
 						{...props.register}
 					/>
