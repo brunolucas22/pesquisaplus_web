@@ -3,9 +3,9 @@
 import { lazy } from 'react';
 import { createBrowserRouter } from 'react-router-dom';
 import App from '../App';
-import { PrivateRouteComponent } from '../components/PrivateRouterComponent';
+// import { PrivateRouteComponent } from '../components/PrivateRouterComponent';
 
-const UsuariosPage = lazy(() => import('../pages/UsuariosPage'));
+const UserPage = lazy(() => import('../pages/UserPage'));
 const ProjectsPage = lazy(() => import('../pages/ProjectPage'));
 const NotFoundPage = lazy(() => import('../pages/NotFoundPage'));
 const ConquistasPage = lazy(() => import('../pages/ConquistasPage'));
@@ -19,9 +19,9 @@ export const router = createBrowserRouter([
 	{
 		path: '/',
 		element: (
-			<PrivateRouteComponent>
-				<App />
-			</PrivateRouteComponent>
+			// <PrivateRouteComponent>
+			<App />
+			// </PrivateRouteComponent>
 		),
 		children: [
 			{
@@ -29,8 +29,8 @@ export const router = createBrowserRouter([
 				element: <ProjectsPage />,
 			},
 			{
-				path: '/usuarios/*',
-				element: <UsuariosPage />,
+				path: '/user/*',
+				element: <UserPage />,
 			},
 			{
 				path: '/conquistas/*',

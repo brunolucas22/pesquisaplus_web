@@ -29,7 +29,7 @@ export const setFailedRequestQueue = (value: unknown, mode?: string) => {
 };
 
 type InterceptorProps = {
-	children?: JSX.Element[];
+	children?: JSX.Element[] | JSX.Element;
 };
 
 export const Interceptors = ({ ...props }: InterceptorProps) => {
@@ -60,7 +60,6 @@ export const Interceptors = ({ ...props }: InterceptorProps) => {
 			return response;
 		},
 		async (err) => {
-			console.log(err?.response?.status);
 			if (err.code === 'ERR_NETWORK') {
 				showErrorDialog({
 					message:
@@ -113,6 +112,8 @@ export const Interceptors = ({ ...props }: InterceptorProps) => {
 			return response;
 		},
 		async (err) => {
+			console.log('erro form ');
+			console.log(err.response.status);
 			if (err.code === 'ERR_NETWORK') {
 				showErrorDialog({
 					message: 'ERR_NETWORK',
@@ -125,16 +126,18 @@ export const Interceptors = ({ ...props }: InterceptorProps) => {
 			if (err?.response) return Promise.reject(err);
 
 			try {
-				if (err?.response >= 400 && err?.response < 500) {
+				if (err?.response.status >= 400 && err?.response.status < 500) {
+					console.log('erro form ');
 					const response = await clientErrorHandle({
 						err,
 						totalDeRefresh,
-
+						isRefreshing,
+						failedRequestQueue,
 						useFormData: true,
 					});
 					return response;
 				}
-				if (err?.response >= 500) {
+				if (err?.response.status >= 500) {
 					await serverErrorHandle(err.AxiosError);
 				}
 			} catch {

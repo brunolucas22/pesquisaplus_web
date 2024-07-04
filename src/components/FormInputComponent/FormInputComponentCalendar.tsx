@@ -87,7 +87,12 @@ export function FormInputComponentCalendar<Interface extends FieldValues>({
 										crudComponentMode === EnumCrudComponentMode.info
 									}
 									value={unformatDate(value)}
-									className="w-full md:w-23rem"
+									inputClassName={classNames(
+										{
+											'p-invalid': props.errors[`${props.keyField}`],
+										},
+										'w-full md:w-23rem'
+									)}
 									locale="pt_BR"
 									dateFormat="dd/mm/yy"
 									placeholder={props.placehoder}

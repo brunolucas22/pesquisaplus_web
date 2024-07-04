@@ -2,8 +2,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { useCrudComponentMode } from '@src/store/ducks/CrudComponentMode';
 import { EnumCrudComponentMode } from '@src/utils/enums/enumCrudComponentMode';
-import moment from 'moment';
-import { Calendar } from 'primereact/calendar';
+import { Dropdown } from 'primereact/dropdown';
 import { classNames } from 'primereact/utils';
 import {
 	Control,
@@ -16,44 +15,30 @@ import {
 import { useSelector } from 'react-redux';
 import { ErrorMessageFormComponent } from '../ErrorMessageFormComponent';
 
-type FormInputComponentIntervalProps<Interface extends FieldValues> = {
+type FormInputComponentDropdownProps<Interface extends FieldValues, Type> = {
 	readOnly?: boolean;
 	control: Control<Interface, any>;
 	keyField: Path<Interface>;
+	optionValue?: string;
+	optionLabel?: string;
+	options: Array<Type>;
 	errors: FieldErrors<Interface>;
 	className?: string;
 	label?: string;
 	placehoder?: string;
 	icon?: string | JSX.Element;
-
+	currency?: boolean;
 	rules?: Omit<
 		RegisterOptions<Interface, Path<Interface>>,
-		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
+		'valueAsDropdown' | 'valueAsDate' | 'setValueAs' | 'disabled'
 	>;
 };
 
-export function FormInputComponentInterval<Interface extends FieldValues>({
-	...props
-}: FormInputComponentIntervalProps<Interface>) {
+export function FormInputComponentDropdown<
+	Interface extends FieldValues,
+	Type
+>({ ...props }: FormInputComponentDropdownProps<Interface, Type>) {
 	const crudComponentMode = useSelector(useCrudComponentMode);
-
-	const formatDate = (dateArray: any) => {
-		const dateStart = moment(dateArray[0]).format('YYYY-MM-DD');
-		const dateEnd = moment(dateArray[1]).format('YYYY-MM-DD');
-		if (!dateEnd || dateEnd === 'Invalid date') return `${dateStart}`;
-		const result = `${dateStart}#${dateEnd}`;
-		return result;
-	};
-	const unformatDate = (dateString: string) => {
-		const arrayData = dateString?.split('#');
-		if (!arrayData) return undefined;
-		const dateStart = moment(arrayData[0], 'YYYY-MM-DD').toDate();
-		if (!arrayData[1]) return [dateStart];
-		const dateEnd = moment(arrayData[1], 'YYYY-MM-DD').toDate();
-		const result = [dateStart, dateEnd];
-		return result;
-	};
-
 	return (
 		<div className={classNames(props.className, 'w-full flex flex-column')}>
 			<Controller
@@ -90,24 +75,27 @@ export function FormInputComponentInterval<Interface extends FieldValues>({
 											props.icon
 										))}
 								</span>
-								<Calendar
+								<Dropdown
 									disabled={
 										props.readOnly ||
 										crudComponentMode === EnumCrudComponentMode.info
 									}
-									value={unformatDate(value)}
-									className="w-full md:w-23rem"
-									locale="pt_BR"
-									dateFormat="dd/mm/yy"
-									inputClassName={classNames({
-										'p-invalid': props.errors[`${props.keyField}`],
-									})}
-									placeholder={props.placehoder}
+									className={classNames(
+										{
+											'p-invalid': props.errors[`${props.keyField}`],
+										},
+										'w-full'
+									)}
+									name={props.keyField}
+									optionValue={props.optionValue}
+									options={props.options}
+									placeholder={props.placehoder || props.label}
+									inputId={props.keyField}
+									value={value}
+									optionLabel={props.optionLabel}
 									onChange={(e) => {
-										onChange(formatDate(e.target.value));
+										onChange(e.value);
 									}}
-									selectionMode="range"
-									readOnlyInput
 								/>
 							</div>
 						</div>

@@ -1,9 +1,6 @@
 import CrudComponent from '@src/components/CrudComponent';
 import { TColumnsTable } from '@src/components/CrudComponent/CrudComponentTable';
-import {
-	showErrorDialog,
-	showSuccessDialog,
-} from '@src/components/DialogComponent/hooks';
+import { showErrorDialog } from '@src/components/DialogComponent/hooks';
 import FormInputComponent from '@src/components/FormInputComponent';
 import { showToastSuccess } from '@src/components/GlobalToast';
 import { useTableConfig } from '@src/hooks/useTableConfig/useTableConfig';
@@ -11,23 +8,23 @@ import {
 	setCrudComponentMode,
 	useCrudComponentMode,
 } from '@src/store/ducks/CrudComponentMode';
+import { EnumColumnsTableType } from '@src/utils/enums/enumColunsTableType';
 import { EnumCrudComponentMode } from '@src/utils/enums/enumCrudComponentMode';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
-import { FaProjectDiagram } from 'react-icons/fa';
 import { useDispatch, useSelector } from 'react-redux';
-import { ProjectForm } from './Components/ProjectForm';
+import { UserForm } from './Components/UserForm';
 import {
-	deleteProject,
-	getDetailProject,
-	getListProject,
-	postProject,
-	putProject,
+	deleteUser,
+	getDetailUser,
+	getListUser,
+	postUser,
+	putUser,
 } from './Service';
-import { IProject } from './interface';
+import { IUser } from './interface';
 
-const ProjectsPage = () => {
-	const [projectSelected, setProjectSelected] = useState<IProject | undefined>(
+const UserPage = () => {
+	const [userSelected, setUserSelected] = useState<IUser | undefined>(
 		undefined
 	);
 
@@ -35,56 +32,55 @@ const ProjectsPage = () => {
 
 	const dispatch = useDispatch();
 	const { setTableConfig, tableConfig, setFilter } = useTableConfig({});
-	const { data } = getListProject(tableConfig);
-	const { mutateAsync: onPost } = postProject();
-	const { mutateAsync: onPut } = putProject();
-	const { mutateAsync: onDelete } = deleteProject();
+	const { data } = getListUser(tableConfig);
+	const { mutateAsync: onPost } = postUser();
+	const { mutateAsync: onPut } = putUser();
+	const { mutateAsync: onDelete } = deleteUser();
 
 	const {
 		formState: { errors },
 		register,
 		handleSubmit,
 		reset,
-	} = useForm<IProject>();
+	} = useForm<IUser>();
 
 	const columnsTable: TColumnsTable[] = [
-		{ field: 'name_project', header: 'Projeto' },
-		{ field: 'start_date_project', header: 'Data Inicial' },
-		{ field: 'expected_final_date_project', header: 'Data Final Prevista' },
+		{
+			field: 'name_user',
+			header: 'Usuário',
+			type: EnumColumnsTableType.photoAndName,
+			aux: 'photo_user',
+		},
+		{ field: 'cpf_user', header: 'CPF' },
+		{ field: 'email_user', header: 'E-mail' },
 	];
 
-	const submit = async (data: IProject) => {
+	const submit = async (data: IUser) => {
+		// const file = FormData
+
+		// file.apply('')
 		try {
 			if (mode === EnumCrudComponentMode.add) {
 				await onPost({
 					restEndpoint: 'create/',
 					data: {
-						name_project: data.name_project,
-						value_project: data.value_project,
-						duration_project: data.duration_project,
-						description_project: data.description_project,
-						start_date_project: data.start_date_project,
+						...data,
 					},
 				});
 
 				return;
 			}
-			if (mode === EnumCrudComponentMode.edit && data && projectSelected) {
+			if (mode === EnumCrudComponentMode.edit && data && userSelected) {
 				await onPut(
 					{
 						restEndpoint: `update/${data?.id}/`,
 						data: {
-							id: data.id,
-							name_project: data.name_project,
-							value_project: data.value_project,
-							duration_project: data.duration_project,
-							description_project: data.description_project,
-							start_date_project: data.start_date_project,
+							...data,
 						},
 					},
 					{
 						onSuccess: () => {
-							setProjectSelected(undefined);
+							setUserSelected(undefined);
 						},
 					}
 				);
@@ -101,18 +97,18 @@ const ProjectsPage = () => {
 	});
 
 	const searchs: JSX.Element[] = [
-		<FormInputComponent.Text<IProject>
+		<FormInputComponent.Text<IUser>
 			errors={errors}
-			label="Nome do Projeto"
-			keyField="name_project"
-			icon={<FaProjectDiagram />}
+			label="Nome do Usuário"
+			keyField="name_user"
+			icon={'pi pi-users'}
 			required={true}
-			register={register('name_project', { required: true })}
+			register={register('name_user', { required: true })}
 		/>,
 	];
 
-	const buttonsTable = (projeto: IProject) => {
-		const { refetch } = getDetailProject(`${projeto.id}`);
+	const buttonsTable = (projeto: IUser) => {
+		const { refetch } = getDetailUser(`${projeto.id}`);
 		const remove = async () => {
 			await onDelete(
 				{
@@ -128,50 +124,34 @@ const ProjectsPage = () => {
 		return (
 			<>
 				<CrudComponent.Button
-					disabled={projeto.status_project}
-					labelTooltip={'Finalizar Projeto'}
-					icon={'pi pi-check-square'}
-					severity="success"
-					onClick={async () => {
-						showSuccessDialog({
-							func: () => {},
-							buttonLabel: 'Finalizar',
-							cancel: () => {},
-							message: 'Deseja Realmente Finalizar Esse Projeto?',
-						});
-					}}
-				/>
-				<CrudComponent.Button
 					labelTooltip="Visualizar"
 					severity="info"
 					icon={'pi pi-eye'}
 					onClick={async () => {
 						refetch().then((response) => {
-							setProjectSelected({
+							setUserSelected({
 								...projeto,
-								...(response.data as IProject),
+								...(response.data as IUser),
 							});
 							dispatch(setCrudComponentMode(EnumCrudComponentMode.info));
 						});
 					}}
 				/>
 				<CrudComponent.Button
-					disabled={projeto.status_project}
 					severity="help"
 					labelTooltip="Editar"
 					icon={'pi pi-pencil'}
 					onClick={async () => {
 						refetch().then((response) => {
-							setProjectSelected({
+							setUserSelected({
 								...projeto,
-								...(response.data as IProject),
+								...(response.data as IUser),
 							});
 							dispatch(setCrudComponentMode(EnumCrudComponentMode.edit));
 						});
 					}}
 				/>
 				<CrudComponent.Button
-					disabled={projeto.status_project}
 					labelTooltip="Deletar"
 					icon={'pi pi-trash'}
 					severity="danger"
@@ -182,7 +162,7 @@ const ProjectsPage = () => {
 							},
 							cancel: () => {},
 							buttonLabel: 'Deletar',
-							message: `Tem Certeza Que Deseja Deletar <b>${projeto.name_project}</b>? <br/> Essa Ação Não Poderá Ser Desfeita.`,
+							message: `Tem Certeza Que Deseja Deletar <b>${projeto.name_user}</b>? <br/> Essa Ação Não Poderá Ser Desfeita.`,
 						});
 					}}
 				/>
@@ -192,7 +172,7 @@ const ProjectsPage = () => {
 
 	return (
 		<CrudComponent.Root>
-			<CrudComponent.Title title={'PROJETOS'}>
+			<CrudComponent.Title title={'USUÁRIOS'}>
 				<CrudComponent.Searchbar
 					handleFilter={handleFilter}
 					searchs={searchs}
@@ -212,24 +192,24 @@ const ProjectsPage = () => {
 					/>
 				}
 			/>
-			<CrudComponent.Form<IProject>
+			<CrudComponent.Form<IUser>
 				onSubmit={submit}
-				rowSelected={projectSelected}
-				setRowSelected={setProjectSelected}
-				form={ProjectForm}
+				rowSelected={userSelected}
+				setRowSelected={setUserSelected}
+				form={UserForm}
 			/>
 
-			<CrudComponent.Table<IProject>
+			<CrudComponent.Table<IUser>
 				keyTable="id"
 				setTableConfig={setTableConfig}
 				tableConfig={tableConfig}
 				columnsTable={columnsTable}
 				responseListDTO={data}
 				buttons={buttonsTable}
-				rowSelected={projectSelected}
+				rowSelected={userSelected}
 			/>
 		</CrudComponent.Root>
 	);
 };
 
-export default ProjectsPage;
+export default UserPage;

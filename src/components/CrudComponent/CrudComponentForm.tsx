@@ -44,6 +44,8 @@ export function CrudComponentForm<Type extends FieldValues>({
 		}
 	};
 
+	const visible = visibility();
+
 	const FormInterceptor = () => {
 		const hookForm = useForm<Type>();
 
@@ -52,20 +54,20 @@ export function CrudComponentForm<Type extends FieldValues>({
 				hookForm.setValue(key as Path<Type>, values ? value : undefined);
 			});
 		};
-
 		useEffect(() => {
 			reset(props.rowSelected);
 			return () => {
 				hookForm.reset();
 			};
-		}, []);
+		}, [visible === true, props.rowSelected]);
 
 		return (
 			<form
-				onSubmit={hookForm.handleSubmit(async (data) => {
-					await props.onSubmit(data);
-					dispatch(setCrudComponentMode(EnumCrudComponentMode.search));
-				})}
+				autoComplete="off"
+				onSubmit={hookForm.handleSubmit(
+					props.onSubmit
+					// dispatch(setCrudComponentMode(EnumCrudComponentMode.search));
+				)}
 				className="w-full h-full flex flex-column justify-content-between"
 			>
 				<div className="flex flex-column w-full h-11 overflow-y-auto">
@@ -115,17 +117,19 @@ export function CrudComponentForm<Type extends FieldValues>({
 		);
 	};
 
+	const Form = FormInterceptor();
+
 	return (
 		<Sidebar
 			className="w-12 sm:w-6"
-			visible={visibility()}
+			visible={visible}
 			position="right"
 			onHide={() => {
 				dispatch(setCrudComponentMode(EnumCrudComponentMode.search));
 				props.setRowSelected && props.setRowSelected(undefined);
 			}}
 		>
-			{visibility() && <FormInterceptor />}
+			{visible && Form}
 		</Sidebar>
 	);
 }

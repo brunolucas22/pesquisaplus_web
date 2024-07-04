@@ -3,6 +3,6 @@ import { FaProjectDiagram } from 'react-icons/fa';
 
 export const itemsMenu: MenuItem[] = [
 	{ label: 'Projetos', url: '/projects', icon: <FaProjectDiagram /> },
-	{ label: 'Usuários', url: '/usuarios', icon: 'pi pi-users' },
+	{ label: 'Usuários', url: '/user', icon: 'pi pi-users' },
 	{ label: 'Conquistas', url: '/conquistas', icon: 'pi pi-star-fill' },
 ];

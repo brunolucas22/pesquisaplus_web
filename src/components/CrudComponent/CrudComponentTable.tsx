@@ -3,6 +3,7 @@ import {
 	IResponseListDTO,
 	ITableConfig,
 } from '@src/hooks/useTableConfig/interface';
+import { EnumColumnsTableType } from '@src/utils/enums/enumColunsTableType';
 import { Column } from 'primereact/column';
 import {
 	DataTable,
@@ -14,7 +15,8 @@ import paginatorTemplate from './CrudComponentPaginatorTemplate';
 export type TColumnsTable = {
 	field: string;
 	header: string;
-	type?: string;
+	type?: EnumColumnsTableType;
+	aux?: any;
 };
 
 type CrudComponentTableProps<Type> = {

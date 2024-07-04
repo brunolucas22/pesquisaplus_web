@@ -76,7 +76,12 @@ export function FormInputComponentNumber<Interface extends FieldValues>({
 										props.readOnly ||
 										crudComponentMode === EnumCrudComponentMode.info
 									}
-									className="w-full"
+									className={classNames(
+										{
+											'p-invalid': props.errors[`${props.keyField}`],
+										},
+										'w-full'
+									)}
 									name={props.keyField}
 									placeholder={props.placehoder || props.label}
 									inputId={props.keyField}
