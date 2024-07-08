@@ -2,7 +2,9 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-explicit-any */
+import { ButtonFile } from '@src/components/ButtonFile';
 import 'cropperjs/dist/cropper.css';
+import { Button } from 'primereact/button';
 import { classNames } from 'primereact/utils';
 import { ChangeEvent, useState } from 'react';
 import {
@@ -36,15 +38,16 @@ export function FormInputComponentPhoto<Interface extends FieldValues>({
 	...props
 }: FormInputComponentPhotoProps<Interface>) {
 	const [cropperVisible, setCropperVisible] = useState<boolean>(false);
+	const [imagemCompleta, setImagemCompleta] = useState<any>();
 
-	const onSelectFile = (
-		event: ChangeEvent<HTMLInputElement>,
-		onChange: any
-	) => {
+	const onSelectFile = (event: ChangeEvent<HTMLInputElement>) => {
+		console.log('não entrou no if');
 		if (event.target.files && event.target.files.length > 0) {
+			console.log('entrou no if');
 			const reader = new FileReader();
 			reader.onload = () => {
-				onChange(reader.result);
+				console.log('loa');
+				setImagemCompleta(reader.result);
 				setCropperVisible(true);
 			};
 			reader.readAsDataURL(event.target.files[0]);
@@ -62,7 +65,7 @@ export function FormInputComponentPhoto<Interface extends FieldValues>({
 						<div className="flex flex-column w-full align-items-start">
 							<FormInputComponentCropperDialog<Interface>
 								isVisible={cropperVisible}
-								value={value}
+								value={imagemCompleta}
 								setIsVisisible={setCropperVisible}
 								onSave={(e) => {
 									onChange(e);
@@ -87,34 +90,42 @@ export function FormInputComponentPhoto<Interface extends FieldValues>({
 									'flex p-inputgroup flex-1 flex-column'
 								)}
 							>
-								{value && (
-									<img
-										onClick={() => {
-											setCropperVisible(true);
-										}}
-										alt="Foto do Perfil"
-										src={value}
-										className="w-10rem min-w-10rem max-w-10rem h-10rem min-h-10rem max-h-10rem"
-									/>
-								)}
-
-								<span>
-									<div className="custom-file-upload">
-										<label
-											htmlFor="file-upload"
-											className="file-upload-button p-button"
-										>
-											Escolher arquivo
-										</label>
-										<input
-											id="file-upload"
-											className="file-upload-input"
-											type="file"
-											accept="image/*"
-											onChange={(e) => onSelectFile(e, onChange)}
-										/>
+								<div className="w-full flex flex-column align-items-center ">
+									<div className="w-11rem h-11rem surface-100 border-1 border-round-lg flex justify-content-center align-items-center">
+										{value ? (
+											<img
+												onClick={() => {
+													setCropperVisible(true);
+												}}
+												alt={props.label}
+												src={value}
+												className="w-10rem border-round-lg min-w-10rem max-w-10rem h-10rem min-h-10rem max-h-10rem"
+											/>
+										) : (
+											<i style={{ fontSize: '8rem' }} className="pi pi-user " />
+										)}
 									</div>
-								</span>
+
+									<span className="w-full flex flex-row justify-content-center gap-2 mt-3">
+										<ButtonFile
+											onChange={(e) => onSelectFile(e)}
+											className="w-4"
+											label="Escolher Foto do Perfil"
+										/>
+
+										<Button
+											disabled={!value}
+											type="button"
+											onClick={() => {
+												onChange(undefined);
+												setImagemCompleta(undefined);
+											}}
+											label="Remover Foto do Perfil"
+											severity="danger"
+											className="w-4"
+										/>
+									</span>
+								</div>
 							</div>
 						</div>
 					);

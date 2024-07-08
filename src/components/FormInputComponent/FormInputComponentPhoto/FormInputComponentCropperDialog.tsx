@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { Button } from 'primereact/button';
 import { Dialog } from 'primereact/dialog';
-import { useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Cropper from 'react-cropper';
 import { FieldValues, Path, PathValue } from 'react-hook-form';
 import './style.scss';
@@ -17,12 +17,22 @@ export function FormInputComponentCropperDialog<Interface extends FieldValues>({
 }: FormInputComponentCropperDialog<Interface>) {
 	const cropperRef = useRef<any>(null);
 
+	const [cropData, setCropData] = useState<any>(null);
+	const [cropperInstance, setCropperInstance] = useState<any>(null);
+
 	const onCrop = () => {
 		if (cropperRef.current) {
+			setCropData(cropperRef.current.cropper.getData());
 			props.onSave(cropperRef.current?.cropper.getCroppedCanvas().toDataURL());
 			props.setIsVisisible(false);
 		}
 	};
+
+	useEffect(() => {
+		if (cropperInstance && cropData) {
+			cropperInstance.setData(cropData);
+		}
+	}, [cropData, cropperInstance]);
 
 	return (
 		<Dialog
@@ -64,6 +74,12 @@ export function FormInputComponentCropperDialog<Interface extends FieldValues>({
 				minCropBoxHeight={10}
 				minCropBoxWidth={10}
 				background={false}
+				onInitialized={(instance) => {
+					setCropperInstance(instance);
+					if (cropData) {
+						instance.setData(cropData);
+					}
+				}}
 				responsive={true}
 				autoCropArea={1}
 				checkOrientation={false}

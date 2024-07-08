@@ -16,7 +16,7 @@ export const UserForm = ({ ...props }: UserFormProps) => {
 		<div className="flex flex-column">
 			<FormInputComponent.Photo<IUser>
 				errors={props.formState?.errors}
-				label="Nome do Usuário"
+				label="Perfil do Usuário"
 				keyField="photo_user"
 				control={props.control}
 				icon={'pi pi-user'}

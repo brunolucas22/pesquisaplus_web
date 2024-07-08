@@ -1,32 +1,8 @@
 .cropper-dialog {
 	max-width: 100%;
-
+	width: 100%;
 	@media (min-width: 768px) {
-		max-width: 80%;
+		max-width: 700px;
+		width: 700px;
 	}
-}
-
-.custom-file-upload {
-	position: relative;
-	display: inline-block;
-}
-
-.file-upload-button {
-	display: inline-block;
-	background-color: var(--primary-color);
-	color: white;
-	padding: 12px 20px;
-	border-radius: 5px;
-	cursor: pointer;
-	border: none;
-	font-weight: bold;
-	text-align: center;
-}
-
-.file-upload-button:hover {
-	background-color: var(--primary-color);
-}
-
-#file-upload {
-	display: none;
 }

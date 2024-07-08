@@ -1,0 +1,28 @@
+.custom-file-upload {
+	position: relative;
+	display: inline-block;
+	width: 100%;
+}
+
+.file-upload-button {
+	display: inline-block;
+	background-color: var(--primary-color);
+	color: white;
+	padding: 12px 20px;
+	border-radius: 5px;
+	width: 100%;
+	cursor: pointer;
+	border: none;
+	font-weight: bold;
+	text-align: center;
+	min-height: 46px;
+}
+
+.file-upload-button:hover {
+	background-color: var(--primary-color);
+	width: 100%;
+}
+
+#file-upload {
+	display: none;
+}
