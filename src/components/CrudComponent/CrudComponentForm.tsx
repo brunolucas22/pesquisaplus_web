@@ -64,10 +64,10 @@ export function CrudComponentForm<Type extends FieldValues>({
 		return (
 			<form
 				autoComplete="off"
-				onSubmit={hookForm.handleSubmit(
-					props.onSubmit
-					// dispatch(setCrudComponentMode(EnumCrudComponentMode.search));
-				)}
+				onSubmit={hookForm.handleSubmit((e) => {
+					props.onSubmit(e);
+					dispatch(setCrudComponentMode(EnumCrudComponentMode.search));
+				})}
 				className="w-full h-full flex flex-column justify-content-between"
 			>
 				<div className="flex flex-column w-full h-11 overflow-y-auto">

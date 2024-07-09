@@ -25,6 +25,8 @@ type FormInputComponentCalendarProps<Interface extends FieldValues> = {
 	label?: string;
 	placehoder?: string;
 	icon?: string | JSX.Element;
+	minDate?: Date;
+	maxDate?: Date;
 	rules?: Omit<
 		RegisterOptions<Interface, Path<Interface>>,
 		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
@@ -82,6 +84,8 @@ export function FormInputComponentCalendar<Interface extends FieldValues>({
 										))}
 								</span>
 								<Calendar
+									maxDate={props.maxDate}
+									minDate={props.minDate}
 									disabled={
 										props.readOnly ||
 										crudComponentMode === EnumCrudComponentMode.info

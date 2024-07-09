@@ -36,8 +36,8 @@ export const UserForm = ({ ...props }: UserFormProps) => {
 				keyField="cpf_user"
 				icon={'pi pi-id-card'}
 				mask={'999.999.999-99'}
-				label="Data de Nascimento"
-				placehoder="Data de Nascimento"
+				label="CPF do Usuário"
+				placehoder="CPF do Usuário"
 				rules={{ required: true }}
 			/>
 			<FormInputComponent.Calendar<IUser>
@@ -47,6 +47,7 @@ export const UserForm = ({ ...props }: UserFormProps) => {
 				icon={'pi pi-calendar'}
 				label="Data de Nascimento"
 				placehoder="Data de Nascimento"
+				maxDate={new Date()}
 				rules={{ required: true }}
 			/>
 			<FormInputComponent.Text<IUser>
