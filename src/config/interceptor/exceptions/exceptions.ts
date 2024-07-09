@@ -16,7 +16,7 @@ export const authRefreshHandle = ({ ...props }: authRefreshHandleProps) => {
 	const originalReq = props.err.config;
 
 	const loginResponseDTO = sessionStorage.getItem('LoginResponseDTO');
-	console.log('nnnnndnalndlja');
+
 	// if (props.err.response.status == 401 && props.totalDeRefresh >= 3) {
 	// 	return (window.location.href = '/login');
 	// }
@@ -29,7 +29,6 @@ export const authRefreshHandle = ({ ...props }: authRefreshHandleProps) => {
 			!props.err.config._retry &&
 			props.totalDeRefresh < 3
 		) {
-			console.log('nnnnndnalndlja');
 			props.totalDeRefresh += 1;
 			originalReq._retry = true;
 			const res = api

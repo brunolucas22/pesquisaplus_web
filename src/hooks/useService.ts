@@ -76,7 +76,7 @@ export function useService({ key, baseUrl }: IUseService) {
 						if (result) {
 							response = true;
 							dispatch(setGlobalLoadingActive(false));
-							console.log('oxe');
+
 							return result.data;
 						}
 					} catch (error) {

@@ -3,6 +3,8 @@
 /* eslint-disable no-mixed-spaces-and-tabs */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ButtonFile } from '@src/components/ButtonFile';
+import { useCrudComponentMode } from '@src/store/ducks/CrudComponentMode';
+import { EnumCrudComponentMode } from '@src/utils/enums/enumCrudComponentMode';
 import 'cropperjs/dist/cropper.css';
 import { Button } from 'primereact/button';
 import { classNames } from 'primereact/utils';
@@ -15,6 +17,7 @@ import {
 	Path,
 	RegisterOptions,
 } from 'react-hook-form';
+import { useSelector } from 'react-redux';
 import { ErrorMessageFormComponent } from '../../ErrorMessageFormComponent';
 import { FormInputComponentCropperDialog } from './FormInputComponentCropperDialog';
 import './style.scss';
@@ -28,6 +31,8 @@ type FormInputComponentPhotoProps<Interface extends FieldValues> = {
 	label?: string;
 	placehoder?: string;
 	icon?: string | JSX.Element;
+	labelSelect?: string;
+	labelRemove?: string;
 	rules?: Omit<
 		RegisterOptions<Interface, Path<Interface>>,
 		'valueAsNumber' | 'valueAsDate' | 'setValueAs' | 'disabled'
@@ -40,13 +45,13 @@ export function FormInputComponentPhoto<Interface extends FieldValues>({
 	const [cropperVisible, setCropperVisible] = useState<boolean>(false);
 	const [imagemCompleta, setImagemCompleta] = useState<any>();
 
+	const mode = useSelector(useCrudComponentMode);
+	const readOnly = props.readOnly || mode === EnumCrudComponentMode.info;
+
 	const onSelectFile = (event: ChangeEvent<HTMLInputElement>) => {
-		console.log('não entrou no if');
 		if (event.target.files && event.target.files.length > 0) {
-			console.log('entrou no if');
 			const reader = new FileReader();
 			reader.onload = () => {
-				console.log('loa');
 				setImagemCompleta(reader.result);
 				setCropperVisible(true);
 			};
@@ -95,7 +100,9 @@ export function FormInputComponentPhoto<Interface extends FieldValues>({
 										{value ? (
 											<img
 												onClick={() => {
-													setCropperVisible(true);
+													if (!readOnly) {
+														setCropperVisible(true);
+													}
 												}}
 												alt={props.label}
 												src={value}
@@ -106,25 +113,27 @@ export function FormInputComponentPhoto<Interface extends FieldValues>({
 										)}
 									</div>
 
-									<span className="w-full flex flex-row justify-content-center gap-2 mt-3">
-										<ButtonFile
-											onChange={(e) => onSelectFile(e)}
-											className="w-4"
-											label="Escolher Foto do Perfil"
-										/>
+									{!readOnly && (
+										<span className="w-full flex flex-row justify-content-center gap-2 mt-3">
+											<ButtonFile
+												onChange={(e) => onSelectFile(e)}
+												className="w-4"
+												label={props.labelSelect ?? 'Escolher Foto'}
+											/>
 
-										<Button
-											disabled={!value}
-											type="button"
-											onClick={() => {
-												onChange(undefined);
-												setImagemCompleta(undefined);
-											}}
-											label="Remover Foto do Perfil"
-											severity="danger"
-											className="w-4"
-										/>
-									</span>
+											<Button
+												disabled={!value}
+												type="button"
+												onClick={() => {
+													onChange(undefined);
+													setImagemCompleta(undefined);
+												}}
+												label={props.labelRemove ?? 'Remover Foto'}
+												severity="danger"
+												className="w-4"
+											/>
+										</span>
+									)}
 								</div>
 							</div>
 						</div>

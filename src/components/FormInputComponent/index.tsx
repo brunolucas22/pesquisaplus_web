@@ -1,5 +1,6 @@
 import { FormInputComponentCalendar } from './FormInputComponentCalendar';
 import { FormInputComponentDropdown } from './FormInputComponentDropdown';
+import { FormInputComponentMask } from './FormInputComponentMask';
 import { FormInputComponentNumber } from './FormInputComponentNumber';
 import {
 	FormInputComponentCropperDialog,
@@ -14,6 +15,7 @@ const FormInputComponent = {
 	Photo: FormInputComponentPhoto,
 	Dropdown: FormInputComponentDropdown,
 	CropperDialog: FormInputComponentCropperDialog,
+	Mask: FormInputComponentMask,
 };
 
 export default FormInputComponent;

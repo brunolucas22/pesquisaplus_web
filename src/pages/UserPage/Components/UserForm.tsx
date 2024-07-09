@@ -16,10 +16,11 @@ export const UserForm = ({ ...props }: UserFormProps) => {
 		<div className="flex flex-column">
 			<FormInputComponent.Photo<IUser>
 				errors={props.formState?.errors}
-				label="Perfil do Usuário"
 				keyField="photo_user"
 				control={props.control}
 				icon={'pi pi-user'}
+				labelSelect="Escolher Foto do Perfil"
+				labelRemove="Remover Foto do Perfil"
 			/>
 			<FormInputComponent.Text<IUser>
 				errors={props.formState?.errors}
@@ -29,6 +30,16 @@ export const UserForm = ({ ...props }: UserFormProps) => {
 				required
 				register={props.register('name_user', { required: true })}
 			/>
+			<FormInputComponent.Mask<IUser>
+				control={props.control}
+				errors={props.formState?.errors}
+				keyField="cpf_user"
+				icon={'pi pi-id-card'}
+				mask={'999.999.999-99'}
+				label="Data de Nascimento"
+				placehoder="Data de Nascimento"
+				rules={{ required: true }}
+			/>
 			<FormInputComponent.Calendar<IUser>
 				control={props.control}
 				errors={props.formState?.errors}
@@ -37,15 +48,6 @@ export const UserForm = ({ ...props }: UserFormProps) => {
 				label="Data de Nascimento"
 				placehoder="Data de Nascimento"
 				rules={{ required: true }}
-			/>
-			<FormInputComponent.Text<IUser>
-				errors={props.formState?.errors}
-				label="CPF do Usuário"
-				keyField="cpf_user"
-				icon="pi pi-id-card"
-				mask={'999.999.999-99'}
-				required
-				register={props.register('cpf_user', { required: true })}
 			/>
 			<FormInputComponent.Text<IUser>
 				errors={props.formState?.errors}
@@ -61,14 +63,14 @@ export const UserForm = ({ ...props }: UserFormProps) => {
 					},
 				})}
 			/>
-			<FormInputComponent.Text<IUser>
+			<FormInputComponent.Mask<IUser>
 				errors={props.formState?.errors}
 				label="Telefone do Usuário"
 				keyField="phone_user"
 				icon="pi pi-phone"
 				mask={'(99) 99999-9999'}
-				required
-				register={props.register('phone_user', { required: true })}
+				control={props.control}
+				rules={{ required: true }}
 			/>
 			<FormInputComponent.Dropdown<IUser, any>
 				errors={props.formState?.errors}
